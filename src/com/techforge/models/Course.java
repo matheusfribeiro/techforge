@@ -24,14 +24,16 @@ public class Course {
         if (code == null || code.isEmpty()){
             throw new IllegalArgumentException("Code cannot be null or empty");
         }
+        if (!code.matches("^[a-z0-9-]+$")) {
+            throw new IllegalArgumentException("Code must only contain lowercase letters, numbers, and hyphens. No spaces, accents, or special characters allowed.");
+        }
         this.code = code;
 
         if (estimatedCompletionTime < 1 || estimatedCompletionTime > 20) {
-            throw new IllegalArgumentException("EstimatedCompletionTime must be between 1 and 100");
+            throw new IllegalArgumentException("EstimatedCompletionTime must be between 1 and 20");
         }
         this.estimatedCompletionTime = estimatedCompletionTime;
 
-        //enum!!
         if (visibility == null) {
             throw new IllegalArgumentException("Visibility cannot be null");
         }
