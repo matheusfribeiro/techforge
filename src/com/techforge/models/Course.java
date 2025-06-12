@@ -10,8 +10,9 @@ public class Course {
     private String instructorName;
     private String syllabus;
     private String developedSkills;
+    private Subcategory subcategory;
 
-    public Course(int id, String name, String code, int estimatedCompletionTime, Visibility visibility, String targetAudience, String instructorName, String syllabus, String developedSkills )
+    public Course(int id, String name, String code, int estimatedCompletionTime, Visibility visibility, String targetAudience, String instructorName, String syllabus, String developedSkills, Subcategory subcategory )
     {
 
         this.id = id;
@@ -49,6 +50,11 @@ public class Course {
         this.syllabus = syllabus;
 
         this.developedSkills = developedSkills;
+
+        if (subcategory == null) {
+            throw new IllegalArgumentException("Subcategory cannot be null");
+        }
+        this.subcategory = subcategory;
 
     }
 
