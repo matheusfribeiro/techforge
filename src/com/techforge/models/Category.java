@@ -22,35 +22,37 @@ public class Category {
         if (code == null || code.isEmpty()) {
             throw new IllegalArgumentException("Code cannot be null or empty");
         }
+        if (!code.matches("^[a-z0-9-]+$")) {
+            throw new IllegalArgumentException("Code must only contain lowercase letters, numbers, and hyphens. No spaces, accents, or special characters allowed.");
+        }
         this.code = code;
 
-        if (shortDescription == null || shortDescription.isEmpty()) {
-            throw new IllegalArgumentException("ShortDescription cannot be null or empty");
-        }
         this.shortDescription = shortDescription;
 
-        if (studyGuide == null || studyGuide.isEmpty()) {
-            throw new IllegalArgumentException("StudyGuide cannot be null or empty");
+        if (studyGuide.isEmpty()) {
+            throw new IllegalArgumentException("StudyGuide cannot be empty");
         }
         this.studyGuide = studyGuide;
 
-        if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null or empty");
-        }
-        this.status = status;
+
+        this.status = (status != null) ? status : Status.ACTIVE;
 
         if (order < 1) {
             throw new IllegalArgumentException("Order cannot be less than 1");
         }
         this.order = order;
 
-        if (iconPath == null || iconPath.isEmpty()) {
-            throw new IllegalArgumentException("IconPath cannot be null or empty");
+        if (iconPath.isEmpty()) {
+            throw new IllegalArgumentException("IconPath cannot be empty");
         }
         this.iconPath = iconPath;
 
-        if (htmlColorCode == null || htmlColorCode.isEmpty()) {
-            throw new IllegalArgumentException("HtmlColorCode cannot be null or empty");
+        if (htmlColorCode != null && !htmlColorCode.isBlank()) {
+            if (!htmlColorCode.matches("^#[0-9A-Fa-f]{6}$")) {
+                throw new IllegalArgumentException(
+                        "htmlColorCode must be in hexadecimal format #RRGGBB"
+                );
+            }
         }
         this.htmlColorCode = htmlColorCode;
     }

@@ -7,8 +7,10 @@ public class Section {
     private int order;
     private Status status;
     private boolean isAssessment;
+    private Course course;
 
-    public Section(int id, String name, String code, int order, Status status, boolean isAssessment) {
+
+    public Section(int id, String name, String code, int order, Status status, boolean isAssessment, Course course) {
         this.id = id;
 
         if (name == null || name.isEmpty()) {
@@ -19,6 +21,9 @@ public class Section {
         if (code == null || code.isEmpty()) {
             throw new IllegalArgumentException("Code cannot be null or empty");
         }
+        if (!code.matches("^[a-z0-9-]+$")) {
+            throw new IllegalArgumentException("Code must only contain lowercase letters, numbers, and hyphens. No spaces, accents, or special characters allowed.");
+        }
         this.code = code;
 
         if (order < 1) {
@@ -26,12 +31,14 @@ public class Section {
         }
         this.order = order;
 
-        if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null or empty");
-        }
-        this.status = status;
+        this.status = (status != null) ? status: Status.INACTIVE;
 
         this.isAssessment = isAssessment;
+
+        if (course == null) {
+            throw new IllegalArgumentException("Course cannot be null");
+        }
+        this.course = course;
 
 
     }

@@ -34,12 +34,9 @@ public class Course {
         }
         this.estimatedCompletionTime = estimatedCompletionTime;
 
-        if (visibility == null) {
-            throw new IllegalArgumentException("Visibility cannot be null");
-        }
-        this.visibility = visibility;
+        this.visibility = (visibility != null) ? visibility : Visibility.PRIVATE;
 
-        if (targetAudience == null || targetAudience.isEmpty()) {
+        if (targetAudience.isEmpty()) {
             throw new IllegalArgumentException("TargetAudience cannot be null or empty");
         }
         this.targetAudience = targetAudience;
@@ -49,14 +46,8 @@ public class Course {
         }
         this.instructorName = instructorName;
 
-        if (syllabus == null || syllabus.isEmpty()) {
-            throw new IllegalArgumentException("Syllabus cannot be null or empty");
-        }
         this.syllabus = syllabus;
 
-        if (developedSkills == null || developedSkills.isEmpty()) {
-            throw new IllegalArgumentException("DevelopedSkills cannot be null or empty");
-        }
         this.developedSkills = developedSkills;
 
     }
