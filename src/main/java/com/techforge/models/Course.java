@@ -37,7 +37,7 @@ public class Course {
 
         this.visibility = (visibility != null) ? visibility : Visibility.PRIVATE;
 
-        if (targetAudience.isEmpty()) {
+        if (targetAudience != null && targetAudience.trim().isEmpty()) {
             throw new IllegalArgumentException("TargetAudience cannot be null or empty");
         }
         this.targetAudience = targetAudience;

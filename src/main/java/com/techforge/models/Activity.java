@@ -13,7 +13,7 @@ public class Activity {
     public Activity(int id, String title, String code, Status status, int order, Type type, Section section) {
         this.id = id;
 
-        if(title == null || title.isEmpty()) {
+        if(title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("Title cannot be null or empty");
         }
         this.title = title;

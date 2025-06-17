@@ -11,7 +11,7 @@ public class Alternative {
     public Alternative(int id, String explanatoryText, int order, boolean isCorrect, String justification, Question question) {
         this.id = id;
 
-        if (explanatoryText == null) {
+        if (explanatoryText == null || explanatoryText.isEmpty()) {
             throw new IllegalArgumentException("explanatoryText cannot be null");
         }
         this.explanatoryText = explanatoryText;

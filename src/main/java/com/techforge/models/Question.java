@@ -22,4 +22,8 @@ public class Question {
         this.activity = activity;
 
     }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
 }

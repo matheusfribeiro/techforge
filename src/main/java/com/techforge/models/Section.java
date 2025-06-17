@@ -27,7 +27,7 @@ public class Section {
         this.code = code;
 
         if (order < 1) {
-            throw new IllegalArgumentException("Order cannot be null or empty");
+            throw new IllegalArgumentException("Order cannot be negative or zero");
         }
         this.order = order;
 
@@ -41,5 +41,9 @@ public class Section {
         this.course = course;
 
 
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

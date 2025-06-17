@@ -14,7 +14,7 @@ public class Category {
     public Category(int id, String name, String code, String shortDescription, String studyGuide, Status status, int order, String iconPath, String htmlColorCode) {
         this.id = id;
 
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
         this.name = name;
@@ -27,22 +27,26 @@ public class Category {
         }
         this.code = code;
 
+        if (shortDescription != null && shortDescription.isEmpty()) {
+            throw new IllegalArgumentException("ShortDescription cannot be empty");
+        }
         this.shortDescription = shortDescription;
 
-        if (studyGuide.isEmpty()) {
+        if (studyGuide != null && studyGuide.isEmpty()) {
             throw new IllegalArgumentException("StudyGuide cannot be empty");
         }
+
         this.studyGuide = studyGuide;
 
 
-        this.status = (status != null) ? status : Status.ACTIVE;
+        this.status = (status != null) ? status : Status.INACTIVE;
 
         if (order < 1) {
             throw new IllegalArgumentException("Order cannot be less than 1");
         }
         this.order = order;
 
-        if (iconPath.isEmpty()) {
+        if (iconPath != null && iconPath.isEmpty()) {
             throw new IllegalArgumentException("IconPath cannot be empty");
         }
         this.iconPath = iconPath;
@@ -56,4 +60,8 @@ public class Category {
         }
         this.htmlColorCode = htmlColorCode;
     }
+
+    public Status getStatus() {
+        return status;
+    };
 }
