@@ -160,4 +160,38 @@ class CategoryTest {
         );
         assertEquals(Status.INACTIVE, category.getStatus());
     }
+
+    @Test
+    void invalidHtmlColorCode() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Category(
+                        1,
+                        "Name",
+                        "code",
+                        null,
+                        null,
+                        null,
+                        1,
+                        null,
+                        "rgb(255, 0, 0)"  // pass invalid html color code
+                )
+        );
+    }
+
+    @Test
+    void validHtmlColorCode() {
+        assertDoesNotThrow(
+                () -> new Category(
+                        1,
+                        "Name",
+                        "code",
+                        null,
+                        null,
+                        null,
+                        1,
+                        null,
+                        "#FF0000"
+                )
+        );
+    }
 }

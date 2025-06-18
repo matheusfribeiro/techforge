@@ -51,12 +51,10 @@ public class Category {
         }
         this.iconPath = iconPath;
 
-        if (htmlColorCode != null && !htmlColorCode.isBlank()) {
-            if (!htmlColorCode.matches("^#[0-9A-Fa-f]{6}$")) {
-                throw new IllegalArgumentException(
-                        "htmlColorCode must be in hexadecimal format #RRGGBB"
-                );
-            }
+        if (htmlColorCode != null && !htmlColorCode.isBlank() && !htmlColorCode.matches("^#[0-9A-Fa-f]{6}$")) {
+            throw new IllegalArgumentException(
+                    "htmlColorCode must be in hexadecimal format #RRGGBB"
+            );
         }
         this.htmlColorCode = htmlColorCode;
     }
