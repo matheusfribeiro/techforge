@@ -8,7 +8,7 @@ public class Explanation {
     public Explanation(int id, String text, Activity activity) {
         this.id = id;
 
-        if (text == null || text.isEmpty()) {
+        if (text == null || text.trim().isEmpty()) {
             throw new IllegalArgumentException("Text cannot be null or empty");
         }
         this.text = text;

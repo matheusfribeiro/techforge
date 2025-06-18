@@ -13,7 +13,7 @@ public class Subcategory {
     public Subcategory(int id, String name, String code, String shortDescription, String studyGuide, Status status, int order, Category category) {
         this.id = id;
 
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
         this.name = name;
@@ -26,12 +26,12 @@ public class Subcategory {
         }
         this.code = code;
 
-        if (shortDescription.isEmpty()) {
-            throw new IllegalArgumentException("ShortDescription cannot be null or empty");
+        if (shortDescription != null && shortDescription.isEmpty()) {
+            throw new IllegalArgumentException("ShortDescription cannot be empty");
         }
         this.shortDescription = shortDescription;
 
-        if (studyGuide.isEmpty()) {
+        if (studyGuide != null && studyGuide.isEmpty()) {
             throw new IllegalArgumentException("StudyGuide cannot be null or empty");
         }
         this.studyGuide = studyGuide;
@@ -48,5 +48,9 @@ public class Subcategory {
         }
         this.category = category;
 
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
