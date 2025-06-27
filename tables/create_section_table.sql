@@ -1,0 +1,10 @@
+CREATE TABLE section (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(255) NOT NULL,
+    `order` INT NOT NULL,
+    status ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'INACTIVE',
+    is_assessment BOOLEAN NOT NULL DEFAULT FALSE,
+    course_id INT NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES course(id)
+);

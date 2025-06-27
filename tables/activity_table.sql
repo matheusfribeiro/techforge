@@ -1,0 +1,10 @@
+CREATE TABLE activity (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    code VARCHAR(255) NOT NULL,
+    status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'INACTIVE',
+    `order` INT NOT NULL,
+    type ENUM('EXPLANATION', 'VIDEO', 'QUESTION') NOT NULL,
+    section_id INT NOT NULL,
+    FOREIGN KEY (section_id) REFERENCES section(id)
+);
