@@ -50,6 +50,10 @@ public class Subcategory {
 
     }
 
+    public int getId() {
+        return id;
+    }
+
     public Status getStatus() {
         return status;
     }
