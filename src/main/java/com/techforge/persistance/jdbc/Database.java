@@ -1,4 +1,4 @@
-package com.techforge.persistance;
+package com.techforge.persistance.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

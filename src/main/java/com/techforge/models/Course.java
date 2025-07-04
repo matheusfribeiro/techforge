@@ -1,16 +1,45 @@
 package com.techforge.models;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "course")
 public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String code;
+
+    @Column(nullable = false, name = "estimated_completion_time")
     private int estimatedCompletionTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Visibility visibility;
+
+    @Column( name = "target_audience", columnDefinition = "TEXT")
     private String targetAudience;
+
+    @Column(nullable = false, name = "instructor_name")
     private String instructorName;
+
+    @Column(columnDefinition = "TEXT")
     private String syllabus;
+
+    @Column(name = "developed_skills", columnDefinition = "TEXT")
     private String developedSkills;
+
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;
+
+    protected Course() {}
 
     public Course(int id, String name, String code, int estimatedCompletionTime, Visibility visibility, String targetAudience, String instructorName, String syllabus, String developedSkills, Subcategory subcategory )
     {
