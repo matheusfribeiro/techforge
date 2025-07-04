@@ -1,6 +1,7 @@
 package com.techforge.persistance;
 
 import com.techforge.models.Course;
+import com.techforge.persistance.jdbc.JdbcCourseDAO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
@@ -34,7 +35,7 @@ class CourseDAOTestContainers {
         System.setProperty("db.user", MY_SQL_CONTAINER.getUsername());
         System.setProperty("db.password", MY_SQL_CONTAINER.getPassword());
 
-        courseDAO = new CourseDAO();
+        courseDAO = new JdbcCourseDAO();
     }
 
     @Test
