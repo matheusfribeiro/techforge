@@ -1,4 +1,4 @@
-package com.techforge.persistance;
+package com.techforge.persistance.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class Database {
     private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/tech_forge";
     private static final String DEFAULT_USER = "root";
-    private static final String DEFAULT_PASSWORD = "n3admin";
+    private static final String DEFAULT_PASSWORD = "";
 
     public static Connection getConnection() throws SQLException {
         String url = System.getProperty("db.url",  System.getenv().getOrDefault("DB_URL", DEFAULT_URL));

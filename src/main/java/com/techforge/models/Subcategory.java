@@ -1,14 +1,38 @@
 package com.techforge.models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "subcategory")
 public class Subcategory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String code;
+
+    @Column(name = "short_description", columnDefinition = "TEXT")
     private String shortDescription;
+
+    @Column(name = "study_guide", columnDefinition = "TEXT")
     private String studyGuide;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
+
+    @Column(nullable = false)
     private int order;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    protected Subcategory() {}
 
     public Subcategory(int id, String name, String code, String shortDescription, String studyGuide, Status status, int order, Category category) {
         this.id = id;
