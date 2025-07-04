@@ -4,6 +4,8 @@ import com.techforge.models.*;
 import com.techforge.persistance.CourseDAO;
 import com.techforge.persistance.hibernate.HibernateCourseDAO;
 import com.techforge.persistance.jdbc.JdbcCourseDAO;
+import com.techforge.persistance.jpa.JpaCourseDAO;
+import com.techforge.persistance.jpa.JpaUtil;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -77,33 +79,58 @@ public class Main {
 
 //        Course updatedCourse = courseDAO.getCourseById(1);
 //        System.out.println("Course after update: " + updatedCourse);
-        CourseDAO dao = new JdbcCourseDAO();
+        CourseDAO dao = new JpaCourseDAO();
 
-        // create
+        //create
         Course course = new Course(
-                "Spring",
-                "spring-boot",
-                10,
-                Visibility.PRIVATE,
-                "Backend developers",
-                "senhor fulano",
-                "test for echo syllabys",
-                "Spring Boot, REST APIs, Java",
+                "Test for echo",
+                "jpa-code",
+                4,
+                Visibility.PUBLIC,
+                "Java Devs",
+                "Instrutora Maria",
+                "Learn JPA with Hibernate",
+                "JPA, Hibernate",
                 null
         );
+        int newId = dao.addCourse(course);
+        System.out.println("Created course: " + course);
+//
+        // read by id
+        Course fetched = dao.getCourseById(newId);
+        System.out.println("Fetched course: " + fetched);
+
+        // read all
+        List<Course> all = dao.getAllCourses();
+        System.out.println("All course names:");
+        for (Course c : all) {
+            System.out.println("  " + c.getName());
+        }
+
+        // update
+//        fetched.setName("JPA Course (Updated)");
+//        dao.updateCourse(fetched);
+//        Course updated = dao.getCourseById(7);
+//        System.out.println("After update: " + updated);
+
+        //delete
+//        Course deleted = dao.deleteCourse(7);
+//        System.out.println("Deleted course: " + deleted);
+
+
 
 //        dao.addCourse(course);
 //        System.out.println(course);
 
 //        //read
-        Course fetchedCourse = dao.getCourseById(1);
-        System.out.println(fetchedCourse);
-
-        List<Course> allCourses = dao.getAllCourses();
-        System.out.println("All courses in database:");
-        for (Course courses : allCourses) {
-            System.out.println(courses);
-        }
+//        Course fetchedCourse = dao.getCourseById(1);
+//        System.out.println(fetchedCourse);
+//
+//        List<Course> allCourses = dao.getAllCourses();
+//        System.out.println("All courses in database:");
+//        for (Course courses : allCourses) {
+//            System.out.println(courses);
+//        }
 //
 //        //update
 //        fetchedCourse.setName("Spring (Updated AGAIN)");
