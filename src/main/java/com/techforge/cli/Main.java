@@ -2,13 +2,15 @@ package com.techforge.cli;
 
 import com.techforge.models.*;
 import com.techforge.persistance.CourseDAO;
+import com.techforge.persistance.hibernate.HibernateCourseDAO;
+import com.techforge.persistance.jdbc.JdbcCourseDAO;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        var courseDAO = new CourseDAO();
+//        var courseDAO = new CourseDAO();
 //        Course course = courseDAO.getCourseById(1);
 //        System.out.println(course);
 
@@ -28,10 +30,10 @@ public class Main {
 //        newCourse.setId(id);
 //        System.out.println(newCourse);
 
-        List<Course> allCourses = courseDAO.getAllCourses();
-        for (Course course : allCourses) {
-            System.out.println(course);
-        }
+//        List<Course> allCourses = courseDAO.getAllCourses();
+//        for (Course course : allCourses) {
+//            System.out.println(course);
+//        }
 
 
 //        courseDAO.deleteCourse(3);
@@ -75,6 +77,58 @@ public class Main {
 
 //        Course updatedCourse = courseDAO.getCourseById(1);
 //        System.out.println("Course after update: " + updatedCourse);
+        CourseDAO dao = new JdbcCourseDAO();
 
+        // create
+        Course course = new Course(
+                "Spring",
+                "spring-boot",
+                10,
+                Visibility.PRIVATE,
+                "Backend developers",
+                "senhor fulano",
+                "test for echo syllabys",
+                "Spring Boot, REST APIs, Java",
+                null
+        );
+
+//        dao.addCourse(course);
+//        System.out.println(course);
+
+//        //read
+        Course fetchedCourse = dao.getCourseById(1);
+        System.out.println(fetchedCourse);
+
+        List<Course> allCourses = dao.getAllCourses();
+        System.out.println("All courses in database:");
+        for (Course courses : allCourses) {
+            System.out.println(courses);
+        }
+//
+//        //update
+//        fetchedCourse.setName("Spring (Updated AGAIN)");
+//        dao.updateCourse(fetchedCourse);
+//        Course updated = dao.getCourseById(1);
+//        System.out.println("After update, name is: " + updated.getName());
+//
+//        //delete
+//        Course deleted = dao.deleteCourse(6);
+//        System.out.println("Deleted course: " + deleted.getName());
+//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+//
+//        try (Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//
+//            try{
+//
+//
+//
+//                session.persist(course);
+//
+//                session.getTransaction().commit();
+//                System.out.println("Saved course with ID: " + course.getId());
+//            } catch (Exception e){
+//                session.getTransaction().rollback();
+//             }
     }
 }
