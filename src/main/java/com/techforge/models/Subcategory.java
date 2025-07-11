@@ -1,6 +1,7 @@
 package com.techforge.models;
 
 import jakarta.persistence.*;
+import org.springframework.http.ResponseEntity;
 
 @Entity
 @Table(name = "subcategory")
@@ -81,4 +82,46 @@ public class Subcategory {
     public Status getStatus() {
         return status;
     }
+
+    public String getName() {
+        return name;
+    }
+    public String getCode() {
+        return code;
+    }
+    public String getShortDescription() {
+        return shortDescription;
+    }
+    public String getStudyGuide() {
+        return studyGuide;
+    }
+    public Category getCategory() {
+        return category;
+    }
+    public int getOrder() {
+        return order;
+    }
+    public void setOrder(int order) {
+        this.order = order;
+    }
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+    public void setStudyGuide(String studyGuide) {
+        this.studyGuide = studyGuide;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+
 }

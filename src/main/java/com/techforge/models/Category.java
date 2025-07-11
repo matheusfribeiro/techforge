@@ -87,4 +87,71 @@ public class Category {
     public Status getStatus() {
         return status;
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public String getStudyGuide() {
+        return studyGuide;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public String getHtmlColorCode() {
+        return htmlColorCode;
+    }
+
+    public int setId(int id) {
+        return this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public void setStudyGuide(String studyGuide) {
+        this.studyGuide = studyGuide;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
+
+    public void setHtmlColorCode(String htmlColorCode) {
+        this.htmlColorCode = htmlColorCode;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
