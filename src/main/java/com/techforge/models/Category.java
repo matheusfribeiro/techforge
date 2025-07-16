@@ -25,7 +25,7 @@ public class Category {
     @Column(nullable = false)
     private Status status;
 
-    @Column(nullable = false)
+    @Column(name = "`order`", nullable = false)
     private int order;
 
     @Column(name = "icon_path")

@@ -2,11 +2,13 @@ package com.techforge.service;
 
 import com.techforge.models.Course;
 import com.techforge.repository.CourseRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CourseService {
     private final CourseRepository courseRepository;
 

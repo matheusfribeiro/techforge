@@ -1,7 +1,6 @@
 package com.techforge.controller;
 
 import com.techforge.dto.CategoryDTO;
-import com.techforge.models.Category;
 import com.techforge.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
