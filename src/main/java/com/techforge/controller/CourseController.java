@@ -1,16 +1,17 @@
 package com.techforge.controller;
 
+import com.techforge.dto.CourseDTO;
 import com.techforge.models.Course;
 import com.techforge.service.CourseService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/courses")
 public class CourseController {
     private final CourseService courseService;
 
@@ -19,40 +20,32 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<Course> addCourse(@RequestBody Course course) {
-        Course savedCourse = courseService.save(course);
+    public ResponseEntity<CourseDTO> create(@Valid @RequestBody CourseDTO dto) {
+        CourseDTO saved = courseService.save(dto);
         return ResponseEntity
-                .created(URI.create("/course/" + savedCourse.getId()))
-                .body(savedCourse);
+                .created(URI.create("/api/courses/" + saved.id()))
+                .body(saved);
     }
 
     @GetMapping
-    public List<Course> getAllCourses() {
+    public List<CourseDTO> getAll() {
         return courseService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable int id) {
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable int id) {
         return courseService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public Optional<ResponseEntity<Course>> updateCourse(@PathVariable int id, @RequestBody Course course) {
-        return Optional.of(courseService.findById(id).map(existing -> {
-            existing.setName(course.getName());
-            existing.setCode(course.getCode());
-            existing.setEstimatedCompletionTime(course.getEstimatedCompletionTime());
-            existing.setVisibility(course.getVisibility());
-            existing.setTargetAudience(course.getTargetAudience());
-            existing.setInstructorName(course.getInstructorName());
-            existing.setSyllabus(course.getSyllabus());
-            existing.setDevelopedSkills(course.getDevelopedSkills());
-            existing.setSubcategory(course.getSubcategory());
-            Course updated = courseService.save(existing);
-            return ResponseEntity.ok(updated);
-        }).orElse((ResponseEntity.notFound().build())));
+    public ResponseEntity<CourseDTO> updateCourse(
+            @PathVariable int id,
+            @Valid @RequestBody CourseDTO dto
+    ) {
+        CourseDTO updated = courseService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
