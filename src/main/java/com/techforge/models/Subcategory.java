@@ -26,7 +26,7 @@ public class Subcategory {
     @Column(nullable = false)
     private Status status;
 
-    @Column(nullable = false)
+    @Column(name = "`order`", nullable = false)
     private int order;
 
     @ManyToOne

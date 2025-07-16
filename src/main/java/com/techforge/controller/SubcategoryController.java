@@ -1,7 +1,9 @@
 package com.techforge.controller;
 
+import com.techforge.dto.SubcategoryDTO;
 import com.techforge.models.Subcategory;
 import com.techforge.service.SubcategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,49 +19,42 @@ public class SubcategoryController {
         this.subcategoryService = subcategoryService;
     }
 
-    @PostMapping// CHECK PATH??
-    public ResponseEntity<Subcategory> create(@RequestBody Subcategory subcategory) {
-        Subcategory savedSubcategory = subcategoryService.save(subcategory);
+    @PostMapping
+    public ResponseEntity<SubcategoryDTO> create(
+            @Valid @RequestBody SubcategoryDTO dto
+    ) {
+        SubcategoryDTO saved = subcategoryService.save(dto);
         return ResponseEntity
-                .created(URI.create("/subcategory/" + savedSubcategory.getId()))
-                .body(savedSubcategory);
+                .created(URI.create("/api/subcategories/" + saved.id()))
+                .body(saved);
     }
 
 
     @GetMapping
-    public List<Subcategory> getAll() {
+    public List<SubcategoryDTO> getAll() {
         return subcategoryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Subcategory> getSubcategoryById(@PathVariable int id) {
+    public ResponseEntity<SubcategoryDTO> getById(@PathVariable int id) {
         return subcategoryService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Subcategory> updateSubcategory(
+    public ResponseEntity<SubcategoryDTO> update(
             @PathVariable int id,
-            @RequestBody Subcategory subcategory
+            @Valid @RequestBody SubcategoryDTO dto
     ) {
-        return subcategoryService.findById(id).map(existing -> {
-            existing.setName(subcategory.getName());
-            existing.setCode(subcategory.getCode());
-            existing.setShortDescription(subcategory.getShortDescription());
-            existing.setStudyGuide(subcategory.getStudyGuide());
-            existing.setStatus(subcategory.getStatus());
-            existing.setOrder(subcategory.getOrder());
-            existing.setCategory(subcategory.getCategory());
-            Subcategory updated = subcategoryService.save(existing);
-            return ResponseEntity.ok(updated);
-        }).orElse(ResponseEntity.notFound().build());
+        SubcategoryDTO updated = subcategoryService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSubcategory(@PathVariable int id) {
-        boolean removed = subcategoryService.deleteById(id);
-        return removed
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        boolean deleted = subcategoryService.deleteById(id);
+        return deleted
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
