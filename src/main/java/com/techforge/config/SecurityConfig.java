@@ -25,7 +25,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/login.html", "/css/**", "/js/**")
+                        .permitAll()
                         .requestMatchers("/api/**").authenticated()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login.html")
+                        .defaultSuccessUrl("/", true)
                 )
                 .httpBasic(Customizer.withDefaults());
 
