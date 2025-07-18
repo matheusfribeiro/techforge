@@ -1,4 +1,4 @@
-package com.techforge.cli;
+package com.techforge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

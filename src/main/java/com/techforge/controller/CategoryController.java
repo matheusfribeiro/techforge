@@ -1,7 +1,8 @@
 package com.techforge.controller;
 
-import com.techforge.models.Category;
+import com.techforge.dto.CategoryDTO;
 import com.techforge.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,40 +19,29 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Category savedCategory = categoryService.save(category);
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody @Valid CategoryDTO dto) {
+        CategoryDTO savedCategory = categoryService.save(dto);
         return ResponseEntity
-                .created(URI.create("/api/categories/" + savedCategory.getId())) // http? URI COMPONENTS BUILDER
+                .created(URI.create("/api/categories/" + savedCategory.id())) // http? URI COMPONENTS BUILDER
                 .body(savedCategory);
     }
 
     @GetMapping
-    public List<Category> getAllCategories() {
+    public List<CategoryDTO> getAllCategories() {
         return categoryService.findAll();
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable int id) {
         return categoryService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category) {
-        return categoryService.findById(id).map(existing -> {
-            existing.setName(category.getName());
-            existing.setCode(category.getCode());
-            existing.setShortDescription(category.getShortDescription());
-            existing.setStudyGuide(category.getStudyGuide());
-            existing.setStatus(category.getStatus());
-            existing.setOrder(category.getOrder());
-            existing.setIconPath(category.getIconPath());
-            existing.setHtmlColorCode(category.getHtmlColorCode());
-            Category updatedCategory = categoryService.save(existing);
-            return ResponseEntity.ok(updatedCategory);
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable int id, @RequestBody @Valid CategoryDTO dto) {
+        return ResponseEntity.ok(categoryService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")

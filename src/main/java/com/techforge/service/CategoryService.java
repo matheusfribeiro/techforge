@@ -1,7 +1,10 @@
 package com.techforge.service;
 
+import com.techforge.dto.CategoryDTO;
+import com.techforge.mapper.CategoryMapper;
 import com.techforge.models.Category;
 import com.techforge.repository.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,18 +20,41 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> findAll() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(CategoryMapper::toDTO)
+                .toList();
     }
 
     @Transactional(readOnly = true)
-    public Optional<Category> findById(int id) {
-        return categoryRepository.findById(id);
+    public Optional<CategoryDTO> findById(int id) {
+        return categoryRepository.findById(id)
+                .map(CategoryMapper::toDTO);
     }
 
     @Transactional
-    public Category save(Category category) {
-        return categoryRepository.save(category);
+    public CategoryDTO save(CategoryDTO dto) {
+        Category entity = CategoryMapper.toEntity(dto);
+        Category saved = categoryRepository.save(entity);
+
+        return  CategoryMapper.toDTO(saved);
+    }
+
+    @Transactional
+    public CategoryDTO update(int id, CategoryDTO dto) {
+        Category existing = categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category Not Found"));
+
+        existing.setName(dto.name());
+        existing.setCode(dto.code());
+        existing.setShortDescription(dto.shortDescription());
+        existing.setStudyGuide(dto.studyGuide());
+        existing.setStatus(dto.status());
+        existing.setOrder(dto.order());
+        existing.setIconPath(dto.iconPath());
+        existing.setHtmlColorCode(dto.htmlColorCode());
+        Category updated = categoryRepository.save(existing);
+        return CategoryMapper.toDTO(updated);
     }
 
     @Transactional
