@@ -36,8 +36,7 @@ public class Category {
 
     protected Category() {}
 
-    public Category(int id, String name, String code, String shortDescription, String studyGuide, Status status, int order, String iconPath, String htmlColorCode) {
-        this.id = id;
+    public Category(String name, String code, String shortDescription, String studyGuide, Status status, int order, String iconPath, String htmlColorCode) {
 
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
@@ -82,6 +81,13 @@ public class Category {
             );
         }
         this.htmlColorCode = htmlColorCode;
+    }
+
+    public Category(int id, String name, String code, String shortDescription, String studyGuide, Status status, int order, String iconPath, String htmlColorCode) {
+        this(name, code, shortDescription, studyGuide, status, order, iconPath, htmlColorCode);
+
+        this.id = id;
+
     }
 
     public Status getStatus() {
