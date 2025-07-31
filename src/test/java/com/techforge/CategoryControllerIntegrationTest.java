@@ -1,6 +1,9 @@
 package com.techforge;
 
-import com.jayway.jsonpath.JsonPath;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techforge.models.Category;
+import com.techforge.models.Status;
+import com.techforge.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +13,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+        "spring.datasource.url=jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
         "spring.datasource.driverClassName=org.h2.Driver",
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
         "spring.jpa.hibernate.ddl-auto=create-drop",
@@ -31,43 +36,46 @@ public class CategoryControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private CategoryRepository categoryRepo;
+
     private Integer createdId;
-    private final String baseJson = "{"
-            + "\"name\": \"Testing Category\","
-            + "\"code\": \"testing-cat\","
-            + "\"shortDescription\": \"Short desc for testing\","
-            + "\"studyGuide\": \"Study guide text\","
-            + "\"status\": \"ACTIVE\","
-            + "\"order\": 5,"
-            + "\"iconPath\": \"/icons/test.png\","
-            + "\"htmlColorCode\": \"#ABCDEF\""
-            + "}";
 
     @BeforeEach
     void setUp() throws Exception {
-        MvcResult result = mockMvc.perform(post("/api/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(baseJson))
-                .andExpect(status().isCreated())
-                .andReturn();
 
-        String json = result.getResponse().getContentAsString();
-        createdId = JsonPath.read(json, "$.id");
+        Category testCategory = new Category(
+                "Testing Category",
+                "testing-cat",
+                "Short desc for testing",
+                "Study guide text",
+                Status.ACTIVE,
+                5,
+                "/icons/test.png",
+                "#ABCDEF"
+        );
+
+        Category savedCategory = categoryRepo.save(testCategory);
+
+        createdId = savedCategory.getId();
+
+
     }
 
     @Test
     void testCreateCategory() throws Exception {
         // json was bugging because of code conflict
-        String createJson = "{"
-                + "\"name\": \"New Category\","
-                + "\"code\": \"testing-cat-new\","
-                + "\"shortDescription\": \"Desc\","
-                + "\"studyGuide\": \"Guide\","
-                + "\"status\": \"ACTIVE\","
-                + "\"order\": 1,"
-                + "\"iconPath\": \"/icons/new.png\","
-                + "\"htmlColorCode\": \"#123456\""
-                + "}";
+        String createJson = """
+                {\
+                "name": "New Category",\
+                "code": "testing-cat-new",\
+                "shortDescription": "Desc",\
+                "studyGuide": "Guide",\
+                "status": "ACTIVE",\
+                "order": 1,\
+                "iconPath": "/icons/new.png",\
+                "htmlColorCode": "#123456"\
+                }""";
 
         mockMvc.perform(post("/api/categories")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -75,6 +83,7 @@ public class CategoryControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.code").value("testing-cat-new"))
                 .andExpect(jsonPath("$.name").value("New Category"));
     }
 
@@ -83,7 +92,9 @@ public class CategoryControllerIntegrationTest {
         mockMvc.perform(get("/api/categories"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].code").value("testing-cat"));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].code").value("testing-cat"))
+                .andExpect(jsonPath("$[0].name").value("Testing Category"));
     }
 
     @Test
@@ -91,17 +102,23 @@ public class CategoryControllerIntegrationTest {
         mockMvc.perform(get("/api/categories/" + createdId))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.order").value(5));
-    }
+                .andExpect(jsonPath("$.code").value("testing-cat"))
+                .andExpect(jsonPath("$.name").value("Testing Category"));    }
 
     @Test
     void testUpdateCategory() throws Exception {
-        String updateJson = baseJson.replace("Testing Category", "Updated Category").replace("5", "7");
+        Category existingCategory = categoryRepo.findById(createdId).orElseThrow();
+        existingCategory.setName("Updated Category");
+        existingCategory.setOrder(7);
+        ObjectMapper jackson = new ObjectMapper();
+        String updateJson = jackson.writeValueAsString(existingCategory);
+
         mockMvc.perform(put("/api/categories/" + createdId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateJson))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("testing-cat"))
                 .andExpect(jsonPath("$.name").value("Updated Category"))
                 .andExpect(jsonPath("$.order").value(7));
     }
@@ -111,14 +128,13 @@ public class CategoryControllerIntegrationTest {
         mockMvc.perform(delete("/api/categories/" + createdId))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+
+        assertTrue(categoryRepo.findById(createdId).isEmpty());
     }
 
     @Test
-    void testGetDeletedCategoryReturnsNotFound() throws Exception {
-        mockMvc.perform(delete("/api/categories/" + createdId))
-                .andExpect(status().isNoContent());
-
-        mockMvc.perform(get("/api/categories/" + createdId))
+    void testNonExistingCategoryReturnsNotFound() throws Exception {
+        mockMvc.perform(delete("/api/categories/9999"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
