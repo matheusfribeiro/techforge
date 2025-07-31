@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.flyway.enabled=false"
 })
-public class CategoryControllerIntegrationTest {
+class CategoryControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,7 +42,7 @@ public class CategoryControllerIntegrationTest {
     private Integer createdId;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
 
         Category testCategory = new Category(
                 "Testing Category",
